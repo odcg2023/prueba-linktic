@@ -18,7 +18,7 @@ namespace ProductosService.Service.Middleware
         {
             try
             {
-                await _next(context); // continua la solicitud
+                await _next(context);
             }
             catch (ApplicationException ex)
             {
@@ -42,7 +42,7 @@ namespace ProductosService.Service.Middleware
 
             context.Response.Clear();
             context.Response.StatusCode = (int)statusCode;
-            context.Response.ContentType = "application/vnd.api+json"; // JSON API estándar
+            context.Response.ContentType = "application/vnd.api+json";
 
             var errorResponse = new JsonApiErrorResponse
             {
