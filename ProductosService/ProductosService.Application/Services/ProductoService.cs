@@ -18,10 +18,11 @@ namespace ProductosService.Application.Services
             
         }
 
-        public Task<int> CrearProducto(ProductoDto producto)
+        public Task<int> CrearProducto(ProductoNuevoDto producto)
         {
             Validaciones(producto);
             var nuevoProducto = Mapper.Map<Producto>(producto);
+            nuevoProducto.Activo = true;
             UnidadTrabajo.Crud<Producto>().Add(nuevoProducto);
             UnidadTrabajo.SaveChanges();
             return Task.FromResult(nuevoProducto.IdProducto);
@@ -39,13 +40,13 @@ namespace ProductosService.Application.Services
             return Task.FromResult(Mapper.Map<List<ProductoDto>>(productos));
         }
 
-        private void Validaciones(ProductoDto producto)
+        private void Validaciones(ProductoNuevoDto producto)
         {
             //Validar si existe un producto con el mismo nombre
             ValidarNombreProducto(producto);
         }
 
-        private void ValidarNombreProducto(ProductoDto producto)
+        private void ValidarNombreProducto(ProductoNuevoDto producto)
         {
             var productoExistente = UnidadTrabajo.Crud<Producto>()
                             .Find(x => x.NombreProducto.Trim().ToLower() ==

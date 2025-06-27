@@ -9,6 +9,7 @@ namespace ProductosService.Transversal.Mapping
         public Mapper()
         {
             CreateMap<Producto, ProductoDto>().ReverseMap();
+            CreateMap<Producto, ProductoNuevoDto>().ReverseMap();
         }
     }
 }

@@ -1,13 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ProductosService.Application.Interfaces;
 using ProductosService.Application.Services;
 using ProductosService.Domain.Interfaces.Repository;
 using ProductosService.Infraestructure.Context;
 using ProductosService.Infraestructure.Repository;
+using ProductosService.Service.HealthChecks;
 using ProductosService.Service.Middleware;
 using Serilog;
 using Serilog.Events;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +22,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
         .Enrich.FromLogContext()
         .WriteTo.Console()
         .WriteTo.File(
-            path: "C:\\TempLogs\\log-.json",
+            path: "C:\\TempLogs\\ServicioProductosLog-.json",
             rollingInterval: RollingInterval.Day,
             formatter: new Serilog.Formatting.Compact.RenderedCompactJsonFormatter());
 });
@@ -30,6 +33,15 @@ builder.Services.AddDbContext<ContextProductos>(options =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAppHealthChecks(builder.Configuration);
+builder.Services.Configure<HealthCheckPublisherOptions>(options =>
+{
+    options.Delay = TimeSpan.FromSeconds(2); 
+    options.Period = TimeSpan.FromSeconds(30); 
+    options.Predicate = _ => true; 
+    options.Timeout = TimeSpan.FromSeconds(10);
+});
+builder.Services.AddSingleton<IHealthCheckPublisher, LoggingHealthCheckPublisher>();
 
 builder.Services.AddScoped(typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -69,6 +81,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-Log.Information("🚀 Serilog está funcionando correctamente en {Time}", DateTime.UtcNow);
+app.UseAppHealthCheckEndpoints();
 app.Run();
 Log.CloseAndFlush();

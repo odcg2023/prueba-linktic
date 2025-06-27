@@ -79,7 +79,7 @@ namespace ProductosService.Service.Controllers
         }
 
         [HttpPost("crear-producto")]
-        public async Task<IActionResult> CrearProducto(ProductoDto producto)
+        public async Task<IActionResult> CrearProducto(ProductoNuevoDto producto)
         {
             var resultadoCreacion = await _productoService.CrearProducto(producto);
 
