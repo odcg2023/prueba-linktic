@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using ProductosService.Service.HealthChecks;
-using ProductosService.Service.Middleware;
 using SeguridadService.Application.Interfaces;
 using SeguridadService.Application.Services;
 using SeguridadService.Domain.Interfaces.Repository;
 using SeguridadService.Infraestructure.Context;
 using SeguridadService.Infraestructure.Repository;
+using SeguridadService.Service.HealthChecks;
+using SeguridadService.Service.Helpers;
+using SeguridadService.Service.Middleware;
 using Serilog;
 using Serilog.Events;
 
@@ -27,7 +28,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
 
 
 builder.Services.AddDbContext<ContextSeguridad>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbPruebaTecnica")).EnableSensitiveDataLogging());
+    options.UseSqlServer(builder.Configuration.GetSecureConnectionString("DbPruebaTecnica")).EnableSensitiveDataLogging());
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -46,6 +47,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<DbContext, ContextSeguridad>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddScoped<JwtHelper>();
 
 builder.Services.AddAuthorization(); 
 builder.Services.AddEndpointsApiExplorer();

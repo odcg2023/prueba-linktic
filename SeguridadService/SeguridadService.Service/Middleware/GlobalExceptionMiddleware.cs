@@ -1,9 +1,11 @@
-﻿using ProductosService.Application.Dto.JsonResponse;
+﻿using Microsoft.AspNetCore.Mvc;
+using ProductosService.Application.Dto.JsonResponse;
+using SeguridadService.Service.Helpers;
 using Serilog;
 using System.Net;
 using System.Text.Json;
 
-namespace ProductosService.Service.Middleware
+namespace SeguridadService.Service.Middleware
 {
     public class GlobalExceptionMiddleware
     {
@@ -23,16 +25,34 @@ namespace ProductosService.Service.Middleware
             catch (ApplicationException ex)
             {
                 Log.Warning(ex, "Error de validación o negocio");
-                await HandleExceptionAsync(context, ex.Message, HttpStatusCode.BadRequest);
+
+                var result = JsonApiResponseFactory.Error(
+                    title: "Bad Request",
+                    detail: ex.Message,
+                    statusCode: "400",
+                    message: "Error al procesar la solicitud. Valide los valores enviados.",
+                    httpStatusCode: StatusCodes.Status400BadRequest
+                );
+
+                await WriteResultAsync(context, result);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error inesperado no controlado");
-                await HandleExceptionAsync(context, "Ha ocurrido un error inesperado", HttpStatusCode.InternalServerError);
+
+                var result = JsonApiResponseFactory.Error(
+                    title: "Internal Server Error",
+                    detail: "Ha ocurrido un error inesperado.",
+                    statusCode: "500",
+                    message: "Error al procesar la solicitud.",
+                    httpStatusCode: StatusCodes.Status500InternalServerError
+                );
+
+                await WriteResultAsync(context, result);
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, string message, HttpStatusCode statusCode)
+        private async Task WriteResultAsync(HttpContext context, IActionResult actionResult)
         {
             if (context.Response.HasStarted)
             {
@@ -41,34 +61,20 @@ namespace ProductosService.Service.Middleware
             }
 
             context.Response.Clear();
-            context.Response.StatusCode = (int)statusCode;
-            context.Response.ContentType = "application/vnd.api+json";
 
-            var errorResponse = new JsonApiErrorResponse
+            if (actionResult is ObjectResult objectResult)
             {
-                Errors = new List<JsonApiError>
-            {
-                new JsonApiError
+                context.Response.StatusCode = objectResult.StatusCode ?? StatusCodes.Status500InternalServerError;
+                context.Response.ContentType = "application/vnd.api+json";
+
+                var json = JsonSerializer.Serialize(objectResult.Value, new JsonSerializerOptions
                 {
-                    Status = ((int)statusCode).ToString(),
-                    Title = statusCode.ToString(),
-                    Detail = message
-                }
-            },
-                Meta = new Meta
-                {
-                    Success = false,
-                    Message = "Error al procesar la solicitud"
-                }
-            };
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = false
+                });
 
-            var json = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = false
-            });
-
-            await context.Response.WriteAsync(json);
+                await context.Response.WriteAsync(json);
+            }
         }
     }
 }

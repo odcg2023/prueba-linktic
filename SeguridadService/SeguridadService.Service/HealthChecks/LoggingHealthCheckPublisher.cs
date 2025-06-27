@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
-namespace ProductosService.Service.HealthChecks
+namespace SeguridadService.Service.HealthChecks
 {
     public class LoggingHealthCheckPublisher : IHealthCheckPublisher
     {

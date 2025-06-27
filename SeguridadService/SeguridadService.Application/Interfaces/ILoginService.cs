@@ -9,6 +9,6 @@ namespace SeguridadService.Application.Interfaces
 {
     public interface ILoginService
     {
-        LoginResponseDto Login(LoginRequestDto login);
+        Task<LoginResponseDto> Login(LoginRequestDto login);
     }
 }

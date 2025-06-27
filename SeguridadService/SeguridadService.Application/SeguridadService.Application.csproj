@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SeguridadService.Common\SeguridadService.Common.csproj" />
     <ProjectReference Include="..\SeguridadService.Domain\SeguridadService.Domain.csproj" />
   </ItemGroup>
 

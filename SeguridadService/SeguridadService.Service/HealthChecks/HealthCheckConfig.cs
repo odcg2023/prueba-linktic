@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace ProductosService.Service.HealthChecks
+namespace SeguridadService.Service.HealthChecks
 {
     public static class HealthCheckConfig
     {
