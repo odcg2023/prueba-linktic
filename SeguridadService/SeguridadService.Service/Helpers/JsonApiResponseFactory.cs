@@ -7,7 +7,7 @@ namespace SeguridadService.Service.Helpers
     {
         public static IActionResult Success<T>(T data, string type, string message)
         {
-            return new OkObjectResult(new JsonApiResponse<T>
+            var response = new JsonApiResponse<T>
             {
                 Data = new JsonApiData<T>
                 {
@@ -19,18 +19,35 @@ namespace SeguridadService.Service.Helpers
                     Success = true,
                     Message = message
                 }
-            });
+            };
+
+            return new OkObjectResult(response);
         }
 
-        public static IActionResult Error(string title, string detail, string statusCode, string message, int httpStatusCode)
+        public static IActionResult NotFound(string detail, string message = "Recurso no encontrado")
         {
-            return new ObjectResult(new JsonApiErrorResponse
+            return BuildErrorResponse("404", "NotFound", detail, message, StatusCodes.Status404NotFound);
+        }
+
+        public static IActionResult BadRequest(string detail, string message = "Solicitud inválida")
+        {
+            return BuildErrorResponse("400", "BadRequest", detail, message, StatusCodes.Status400BadRequest);
+        }
+
+        public static IActionResult InternalServerError(string detail, string message = "Ocurrió un error inesperado")
+        {
+            return BuildErrorResponse("500", "InternalServerError", detail, message, StatusCodes.Status500InternalServerError);
+        }
+
+        private static IActionResult BuildErrorResponse(string status, string title, string detail, string message, int httpStatusCode)
+        {
+            var errorResponse = new JsonApiErrorResponse
             {
                 Errors = new List<JsonApiError>
             {
                 new JsonApiError
                 {
-                    Status = statusCode,
+                    Status = status,
                     Title = title,
                     Detail = detail
                 }
@@ -40,7 +57,9 @@ namespace SeguridadService.Service.Helpers
                     Success = false,
                     Message = message
                 }
-            })
+            };
+
+            return new ObjectResult(errorResponse)
             {
                 StatusCode = httpStatusCode
             };
