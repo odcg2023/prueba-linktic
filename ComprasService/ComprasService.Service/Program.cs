@@ -53,7 +53,7 @@ builder.Services.AddScoped(typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<DbContext, ContextCompras>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<IComprasService, CompraService>();
+builder.Services.AddTransient<ICompraService, CompraService>();
 builder.Services.AddScoped<ICryptoHelper, CryptoHelper>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 

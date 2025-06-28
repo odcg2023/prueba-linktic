@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ComprasService.Application.Interfaces
 {
-    public interface IComprasService
+    public interface ICompraService
     {
         Task<CompraDto> RegistrarCompra(RegistraCompraDto compra);
     }

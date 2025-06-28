@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ComprasService.Application.Services
 {
-    public class CompraService : ServiceBase, IComprasService
+    public class CompraService : ServiceBase, ICompraService
     {
         public CompraService(IUnitOfWork unitOfWork, 
             IMapper mapper, 
