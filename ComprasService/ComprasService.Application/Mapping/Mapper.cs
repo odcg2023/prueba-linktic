@@ -8,7 +8,8 @@ namespace ComprasService.Transversal.Mapping
     {
         public Mapper()
         {
-            
+            CreateMap<Compra, CompraDto>().ReverseMap();
+           
         }
     }
 }

@@ -25,6 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
@@ -35,6 +36,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ComprasService.Application\ComprasService.Application.csproj" />
     <ProjectReference Include="..\ComprasService.Common\ComprasService.Common.csproj" />
+    <ProjectReference Include="..\ComprasService.Infraestructure.Integrations\ComprasService.Infraestructure.Integrations.csproj" />
     <ProjectReference Include="..\ComprasService.Infraestructure\ComprasService.Infraestructure.csproj" />
   </ItemGroup>
 

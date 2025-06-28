@@ -9,5 +9,6 @@ namespace ComprasService.Application.Interfaces
     public interface ICurrentUserService
     {
         short GetCurrentUserId();
+        string GetCurrentToken();
     }
 }

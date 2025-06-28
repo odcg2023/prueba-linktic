@@ -25,5 +25,17 @@ namespace ComprasService.Service.Helpers
 
             return short.Parse(decrypted);
         }
+        public string GetCurrentToken()
+        {
+            var authorizationHeader = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].FirstOrDefault();
+
+            if (string.IsNullOrEmpty(authorizationHeader))
+                throw new ApplicationException("No se pudo obtener el token del header Authorization.");
+
+            if (authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                return authorizationHeader.Substring("Bearer ".Length).Trim();
+
+            return authorizationHeader;
+        }
     }
 }

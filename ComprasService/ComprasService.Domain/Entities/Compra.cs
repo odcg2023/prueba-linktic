@@ -13,6 +13,8 @@ public partial class Compra
 
     public int TotalItems { get; set; }
 
+    public decimal ValorTotalCompra { get; set; }
+
     public short UsuarioCreacion { get; set; }
 
     public DateTime FechaCreacion { get; set; }

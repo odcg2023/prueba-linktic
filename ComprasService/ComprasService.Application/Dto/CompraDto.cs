@@ -15,6 +15,8 @@ namespace ComprasService.Application.Dto
         public DateTime FechaCompra { get; set; }
 
         public int TotalItems { get; set; }
+        public decimal ValorTotalCompra { get; set; }
+        public List<CompraDetalleDto> Productos { get; set; } = new();
 
     }
 }

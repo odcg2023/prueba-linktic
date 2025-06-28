@@ -1,9 +1,11 @@
 ﻿using ComprasService.Application.Helpers;
 using ComprasService.Application.Interfaces;
+using ComprasService.Application.Interfaces.Integrations;
 using ComprasService.Application.Services;
 using ComprasService.Common;
 using ComprasService.Domain.Interfaces.Repository;
 using ComprasService.Infraestructure.Context;
+using ComprasService.Infraestructure.Integrations.Services;
 using ComprasService.Infraestructure.Repository;
 using ComprasService.Service.HealthChecks;
 using ComprasService.Service.Helpers;
@@ -13,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Polly;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
@@ -56,6 +59,13 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ICompraService, CompraService>();
 builder.Services.AddScoped<ICryptoHelper, CryptoHelper>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddHttpClient<IProductoApiService, ProductoApiService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["UrlApiProductos"]); 
+})
+.AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(300)))
+.AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

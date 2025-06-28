@@ -9,6 +9,8 @@ namespace ComprasService.Application.Interfaces
 {
     public interface ICompraService
     {
-        Task<CompraDto> RegistrarCompra(RegistraCompraDto compra);
+        Task<CompraDto> RegistrarCompra(RegistraCompraDto nuevaCompra);
+        Task<List<CompraDto>> ObtenerCompras();
+        Task<CompraDto> ObtenerCompraPorId(int idCompra);
     }
 }

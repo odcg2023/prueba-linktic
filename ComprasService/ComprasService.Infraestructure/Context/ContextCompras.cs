@@ -24,7 +24,7 @@ public partial class ContextCompras : DbContext
     {
         modelBuilder.Entity<Compra>(entity =>
         {
-            entity.HasKey(e => e.IdCompra).HasName("PK__Compra__0A5CDB5CC25F3F5C");
+            entity.HasKey(e => e.IdCompra).HasName("PK__Compra__0A5CDB5C86F6883E");
 
             entity.ToTable("Compra", "Compras");
 
@@ -35,11 +35,12 @@ public partial class ContextCompras : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.ValorTotalCompra).HasColumnType("decimal(18, 2)");
         });
 
         modelBuilder.Entity<CompraDetalle>(entity =>
         {
-            entity.HasKey(e => e.IdCompraDetalle).HasName("PK__CompraDe__A1B840C5539F5EF8");
+            entity.HasKey(e => e.IdCompraDetalle).HasName("PK__CompraDe__A1B840C57AC5871F");
 
             entity.ToTable("CompraDetalle", "Compras");
 

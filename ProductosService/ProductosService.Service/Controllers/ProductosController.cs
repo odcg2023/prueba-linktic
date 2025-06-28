@@ -36,7 +36,7 @@ namespace ProductosService.Service.Controllers
         /// <returns>Retorna un producto si existe, o un error 404 si no se encuentra.</returns>
         /// <response code="200">Producto encontrado exitosamente.</response>
         /// <response code="404">No existe un producto con el ID proporcionado.</response>
-        [HttpGet("obtener-producto-por-id")]
+        [HttpGet("obtener-producto-por-id/{idProducto}")]
         public async Task<IActionResult> ObtenerProductoPorId(int idProducto)
         {
             var producto = await _productoService.ObtenerProductoPorId(idProducto);

@@ -37,10 +37,42 @@ namespace ComprasService.Infraestructure.Repository
             _context.Entry(entity).State = EntityState.Modified;
         }
 
+        public IQueryable<TEntity> GetAll()
+        {
+            return _entity;
+        }
+
+        public IQueryable<TEntity> GetAllWithIncludes(params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = _entity;
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return query;
+        }
+
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            IQueryable<TEntity> query = _entity.Where(predicate);
-            return query;
+            return _entity.Where(predicate);
+        }
+
+        public IQueryable<TEntity> FindWithIncludes(
+            Expression<Func<TEntity, bool>> predicate,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = _entity;
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return query.Where(predicate);
         }
 
         public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
@@ -48,15 +80,10 @@ namespace ComprasService.Infraestructure.Repository
             return _entity.Where(predicate);
         }
 
-        public IQueryable<TEntity> GetAll()
-        {
-            IQueryable<TEntity> query = _entity;
-            return query;
-        }
-
         public void Save()
         {
             _context.SaveChanges();
         }
     }
+
 }
