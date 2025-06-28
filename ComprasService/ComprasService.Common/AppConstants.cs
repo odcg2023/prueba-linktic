@@ -16,8 +16,7 @@ namespace ComprasService.Common
 
         public static class Messages
         {
-            public const string PeticionCorrecta = "Petición ejecutada de forma correcta";
-            public const string ProductoInexistente = "El producto consultado no existe";
-        }
+            public const string CompraRegistrada = "Compra registrada correctamete";
+         }
     }
 }
