@@ -187,10 +187,42 @@ Ejemplo:
 
 ---
 
+## 🐳 Dockerización futura
+
+- El microservicio está listo para contenerizarse con un `Dockerfile` multi-stage .NET y orquestarse con `docker-compose`.
+- Se definirá un stack que incluya SQL Server y variables de entorno seguras para claves JWT y conexión cifrada.
+
+### Ejemplo futuro de `docker-compose.yml`
+
+```yaml
+version: '3.8'
+services:
+  productosservice:
+    build: .
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Db=...
+      - Authentication__Issuer=ProductosAPI
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+```
+
+---
+
 ## 🧪 Pruebas unitarias
 
-- Se usa **xUnit + Moq** para la capa `Application`.
-- Se cubren escenarios como:
+- Usa **xUnit + Moq** para probar la capa `Application`.
+- Cubre escenarios:
   - Creación válida y duplicados.
-  - Consultas de producto por ID (existente / no existente).
+  - Consultas de producto por ID (existente  / no existente).
   - Fallos simulados en repositorio (errores BD).
