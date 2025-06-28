@@ -74,8 +74,8 @@ Microservicio desarrollado en **.NET 7**, basado en Clean Architecture adaptada,
 - Se generan automáticamente con **Serilog**:
   - Captura `400` (excepciones de negocio) y `500` (errores inesperados).
   - Guarda en `Logs/log-*.json`.
-
-Ejemplo:
+  
+  - Ejemplo:
 
 ```json
 {
@@ -87,6 +87,7 @@ Ejemplo:
   "RequestId": "0H..."
 }
 ```
+
 
 ---
 
