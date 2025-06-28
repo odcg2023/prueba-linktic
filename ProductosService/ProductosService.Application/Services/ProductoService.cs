@@ -22,7 +22,7 @@ namespace ProductosService.Application.Services
             
         }
 
-        public Task<int> CrearProducto(ProductoNuevoDto producto)
+        public Task<ProductoDto> CrearProducto(ProductoNuevoDto producto)
         {
             Validaciones(producto);
             var nuevoProducto = Mapper.Map<Producto>(producto);
@@ -30,7 +30,7 @@ namespace ProductosService.Application.Services
             nuevoProducto.UsuarioCreacion = CurrentUserService.GetCurrentUserId();
             UnidadTrabajo.Crud<Producto>().Add(nuevoProducto);
             UnidadTrabajo.SaveChanges();
-            return Task.FromResult(nuevoProducto.IdProducto);
+            return Task.FromResult(Mapper.Map<ProductoDto>(nuevoProducto));
         }
 
         public Task<ProductoDto> ObtenerProductoPorId(int idProducto)

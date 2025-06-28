@@ -17,6 +17,7 @@ using ProductosService.Service.Helpers;
 using ProductosService.Service.Middleware;
 using Serilog;
 using Serilog.Events;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,6 +79,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductosService.Service", Version = "v1" });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 
     // Definir el esquema de seguridad JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
