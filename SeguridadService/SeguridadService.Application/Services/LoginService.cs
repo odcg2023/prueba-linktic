@@ -10,9 +10,10 @@ namespace SeguridadService.Application.Services
 {
     public class LoginService : ServiceBase, ILoginService
     {
-        public LoginService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly ICryptoHelper _crypto;
+        public LoginService(IUnitOfWork unitOfWork, IMapper mapper, ICryptoHelper crypto) : base(unitOfWork, mapper)
         {
-            
+            _crypto = crypto;
         }
         public Task<LoginResponseDto> Login(LoginRequestDto login)
         {
@@ -50,8 +51,8 @@ namespace SeguridadService.Application.Services
 
         private void ValidarPassword(LoginRequestDto login, Usuario usuario)
         {
-            var password = Crypto.Decrypt(login.Password);
-            var passwordDb = Crypto.Decrypt(usuario.Password);
+            var password = _crypto.Decrypt(login.Password);
+            var passwordDb = _crypto.Decrypt(usuario.Password);
 
             if (passwordDb != password)
                 throw new ApplicationException(Messages.LogueoFallido);

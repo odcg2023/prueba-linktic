@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
+using SeguridadService.Application.Helpers;
 using SeguridadService.Application.Interfaces;
 using SeguridadService.Application.Services;
 using SeguridadService.Domain.Interfaces.Repository;
@@ -10,6 +12,7 @@ using SeguridadService.Service.Helpers;
 using SeguridadService.Service.Middleware;
 using Serilog;
 using Serilog.Events;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,11 +50,19 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<DbContext, ContextSeguridad>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddScoped<ICryptoHelper, CryptoHelper>();
 builder.Services.AddScoped<JwtHelper>();
 
 builder.Services.AddAuthorization(); 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Seguridad API", Version = "v1" });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 builder.Services.AddControllers();
 
