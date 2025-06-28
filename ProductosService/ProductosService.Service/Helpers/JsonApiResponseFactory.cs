@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductosService.Application.Dto.JsonResponse;
 
-namespace SeguridadService.Service.Helpers
+namespace ProductosService.Service.Helpers
 {
     public static class JsonApiResponseFactory
     {
@@ -65,4 +65,5 @@ namespace SeguridadService.Service.Helpers
             };
         }
     }
+
 }

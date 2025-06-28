@@ -8,12 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProductosService.Common.AppConstants;
 
 namespace ProductosService.Application.Services
 {
     public class ProductoService : ServiceBase, IProductoService
     {
-        public ProductoService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public ProductoService(IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            ICurrentUserService currentUserService) 
+            : base(unitOfWork, mapper, currentUserService)
         {
             
         }
@@ -23,6 +27,7 @@ namespace ProductosService.Application.Services
             Validaciones(producto);
             var nuevoProducto = Mapper.Map<Producto>(producto);
             nuevoProducto.Activo = true;
+            nuevoProducto.UsuarioCreacion = CurrentUserService.GetCurrentUserId();
             UnidadTrabajo.Crud<Producto>().Add(nuevoProducto);
             UnidadTrabajo.SaveChanges();
             return Task.FromResult(nuevoProducto.IdProducto);
@@ -30,7 +35,7 @@ namespace ProductosService.Application.Services
 
         public Task<ProductoDto> ObtenerProductoPorId(int idProducto)
         {
-            var producto = UnidadTrabajo.Crud<Producto>().Find(x=> x.IdProducto == idProducto).FirstOrDefault();  
+            var producto = UnidadTrabajo.Crud<Producto>().Find(x=> x.IdProducto == idProducto).FirstOrDefault();
             return Task.FromResult(Mapper.Map<ProductoDto>(producto));
         }
 

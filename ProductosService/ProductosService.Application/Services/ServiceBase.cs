@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using ProductosService.Application.Interfaces;
 using ProductosService.Domain.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace ProductosService.Application.Services
     {
         protected readonly IUnitOfWork UnidadTrabajo;
         protected readonly IMapper Mapper;
-        public ServiceBase(IUnitOfWork unitOfWork, IMapper mapper)
+        protected readonly ICurrentUserService CurrentUserService;
+        public ServiceBase(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService)
         {
             UnidadTrabajo = unitOfWork;
             Mapper = mapper;
+            CurrentUserService = currentUserService;
         }
     }
 }

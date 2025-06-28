@@ -26,12 +26,9 @@ namespace SeguridadService.Service.Middleware
             {
                 Log.Warning(ex, "Error de validación o negocio");
 
-                var result = JsonApiResponseFactory.Error(
-                    title: "Bad Request",
+                var result = JsonApiResponseFactory.BadRequest(
                     detail: ex.Message,
-                    statusCode: "400",
-                    message: "Error al procesar la solicitud. Valide los valores enviados.",
-                    httpStatusCode: StatusCodes.Status400BadRequest
+                    message: "Error al procesar la solicitud. Valide los valores enviados."
                 );
 
                 await WriteResultAsync(context, result);
@@ -40,12 +37,9 @@ namespace SeguridadService.Service.Middleware
             {
                 Log.Error(ex, "Error inesperado no controlado");
 
-                var result = JsonApiResponseFactory.Error(
-                    title: "Internal Server Error",
+                var result = JsonApiResponseFactory.InternalServerError(
                     detail: "Ha ocurrido un error inesperado.",
-                    statusCode: "500",
-                    message: "Error al procesar la solicitud.",
-                    httpStatusCode: StatusCodes.Status500InternalServerError
+                    message: "Error al procesar la solicitud."
                 );
 
                 await WriteResultAsync(context, result);
