@@ -1,4 +1,5 @@
-﻿using HealthChecks.UI.Client;
+﻿using ComprasService.Service.Helpers;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -10,7 +11,7 @@ namespace ComprasService.Service.HealthChecks
         {
             services.AddHealthChecks()
                 .AddSqlServer(
-                    connectionString: configuration.GetConnectionString("DbPruebaTecnica"),
+                    connectionString: configuration.GetSecureConnectionString("DbPruebaTecnica"),
                     name: "Base de datos",
                     healthQuery: "SELECT 1",
                     failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
