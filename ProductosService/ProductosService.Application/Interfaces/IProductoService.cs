@@ -9,7 +9,7 @@ namespace ProductosService.Application.Interfaces
 {
     public interface IProductoService
     {
-        Task<int> CrearProducto(ProductoDto producto);
+        Task<ProductoDto> CrearProducto(ProductoNuevoDto producto);
         Task<ProductoDto> ObtenerProductoPorId(int idProducto);
         Task<List<ProductoDto>> ObtenerProductos();
     }
