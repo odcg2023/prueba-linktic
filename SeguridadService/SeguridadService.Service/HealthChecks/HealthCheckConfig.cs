@@ -1,6 +1,7 @@
 ﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SeguridadService.Service.Helpers;
 
 namespace SeguridadService.Service.HealthChecks
 {
@@ -10,7 +11,7 @@ namespace SeguridadService.Service.HealthChecks
         {
             services.AddHealthChecks()
                 .AddSqlServer(
-                    connectionString: configuration.GetConnectionString("DbPruebaTecnica"),
+                    connectionString: configuration.GetSecureConnectionString("DbPruebaTecnica"),
                     name: "Base de datos",
                     healthQuery: "SELECT 1",
                     failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
