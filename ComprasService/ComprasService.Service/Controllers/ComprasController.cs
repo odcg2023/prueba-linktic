@@ -11,7 +11,7 @@ namespace ComprasService.Service.Controllers
 {
     [Authorize]
     /// <summary>
-    /// API para gestionar las compras.
+    /// API para gestionar las compras del sistema.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -28,12 +28,15 @@ namespace ComprasService.Service.Controllers
         /// <summary>
         /// Registra una nueva compra en el sistema.
         /// </summary>
-        /// <param name="compra">Datos de la compra a registrar.</param>
-        /// <returns>La compra registrada con su Id y detalles.</returns>
+        /// <param name="compra">Objeto con los datos de la compra a registrar.</param>
+        /// <returns>La compra registrada con su Id y sus detalles.</returns>
         /// <response code="200">Compra registrada exitosamente.</response>
-        [HttpPost]
-        [Route("registrar-compra")]
-        [ProducesResponseType(typeof(CompraDto), StatusCodes.Status200OK)]
+        /// <response code="400">Error en los datos enviados o reglas de negocio no cumplidas.</response>
+        /// <response code="500">Error interno del servidor.</response>
+        [HttpPost("registrar-compra")]
+        [ProducesResponseType(typeof(JsonApiResponse<CompraDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(JsonApiErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(JsonApiErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RegistrarCompra([FromBody] RegistraCompraDto compra)
         {
             var registroCompra = await _compraService.RegistrarCompra(compra);
@@ -43,11 +46,12 @@ namespace ComprasService.Service.Controllers
         /// <summary>
         /// Obtiene todas las compras registradas en el sistema.
         /// </summary>
-        /// <returns>Lista de compras.</returns>
+        /// <returns>Lista de todas las compras existentes.</returns>
         /// <response code="200">Compras obtenidas exitosamente.</response>
-        [HttpGet]
-        [Route("obtener-compras")]
-        [ProducesResponseType(typeof(List<CompraDto>), StatusCodes.Status200OK)]
+        /// <response code="500">Error interno del servidor.</response>
+        [HttpGet("obtener-compras")]
+        [ProducesResponseType(typeof(JsonApiResponse<List<CompraDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(JsonApiErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ObtenerCompras()
         {
             var compras = await _compraService.ObtenerCompras();
@@ -57,18 +61,19 @@ namespace ComprasService.Service.Controllers
         /// <summary>
         /// Obtiene una compra específica por su identificador.
         /// </summary>
-        /// <param name="id">Id de la compra.</param>
-        /// <returns>Datos de la compra encontrada.</returns>
+        /// <param name="id">Identificador único de la compra.</param>
+        /// <returns>Datos de la compra solicitada.</returns>
         /// <response code="200">Compra obtenida exitosamente.</response>
         /// <response code="404">No se encontró la compra con el Id proporcionado.</response>
+        /// <response code="500">Error interno del servidor.</response>
         [HttpGet("obtener-compra-por-id/{id}")]
-        [ProducesResponseType(typeof(CompraDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(JsonApiResponse<CompraDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(JsonApiErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(JsonApiErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ObtenerCompraPorId(int id)
         {
             var compra = await _compraService.ObtenerCompraPorId(id);
             return JsonApiResponseFactory.Success(compra, "compra", $"Compra {id} obtenida correctamente");
         }
     }
-
 }
