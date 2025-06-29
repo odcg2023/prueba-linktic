@@ -37,13 +37,13 @@ El archivo `appsettings.json` contiene placeholders para las cadenas de conexió
 
     "ConnectionStrings": {
       "Db": "Server=[SERVER];DataBase=[DATABASE];User=[USER];Password=[PASSWORD];..."
-    },
+```    },
     "Levels": {
       "Level1": "...",
       "Level2": "...",
       "Level3": "...",
       "Level4": "..."
-    }
+```    }
 
 Estos valores son desencriptados mediante `CryptoHelper` usando claves definidas en `AppConstants.CryptoKeys`.
 
@@ -73,7 +73,7 @@ Ejemplo de log:
       "@m": "Error de validación o negocio",
       "@l": "Warning",
       "@x": "System.ApplicationException: Usuario y/o password inválidos"
-    }
+```    }
 
 
 ## 📦 Respuestas JSON:API estandarizadas
@@ -94,9 +94,9 @@ Ejemplo de log:
       "meta": {
         "success": true,
         "message": "Petición ejecutada de forma correcta"
-      }
+```      }
     }
-
+```
 ---
 
 ### ⚠️ Error de negocio (`400 BadRequest`)
@@ -107,14 +107,14 @@ Ejemplo de log:
           "status": "400",
           "title": "Bad Request",
           "detail": "Ya existe un producto con el nombre: Producto A"
-        }
+```        }
       ],
       "meta": {
         "success": false,
         "message": "Error al procesar la solicitud. Valide los valores enviados."
-      }
+```      }
     }
-
+```
 ---
 
 ### 🔍 No encontrado (`404 NotFound`)
@@ -125,14 +125,14 @@ Ejemplo de log:
           "status": "404",
           "title": "NotFound",
           "detail": "No existe un producto con ID = 123"
-        }
+```        }
       ],
       "meta": {
         "success": false,
         "message": "Error al obtener producto"
-      }
+```      }
     }
-
+```
 ---
 
 ### 💥 Error inesperado (`500 InternalServerError`)
@@ -143,7 +143,7 @@ Ejemplo de log:
           "status": "500",
           "title": "Internal Server Error",
           "detail": "Ha ocurrido un error inesperado."
-        }
+```        }
 
 ## 🧪 Pruebas unitarias
 
@@ -181,7 +181,7 @@ GO
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.TABLES 
     WHERE TABLE_SCHEMA = 'Usuarios' AND TABLE_NAME = 'Usuario'
-)
+```)
 BEGIN
     CREATE TABLE [Usuarios].[Usuario]
     (
@@ -230,7 +230,7 @@ GO
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.TABLES 
     WHERE TABLE_SCHEMA = 'Compras' AND TABLE_NAME = 'Compra'
-)
+```)
 BEGIN
     CREATE TABLE [Compras].[Compra]
     (
@@ -251,7 +251,7 @@ GO
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.TABLES 
     WHERE TABLE_SCHEMA = 'Compras' AND TABLE_NAME = 'CompraDetalle'
-)
+```)
 BEGIN
     CREATE TABLE [Compras].[CompraDetalle]
     (
@@ -313,7 +313,7 @@ GO
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.TABLES 
     WHERE TABLE_SCHEMA = 'Productos' AND TABLE_NAME = 'Producto'
-)
+```)
 BEGIN
     CREATE TABLE [Productos].[Producto]
     (
@@ -360,7 +360,7 @@ GO
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.TABLES 
     WHERE TABLE_SCHEMA = 'Inventarios' AND TABLE_NAME = 'Inventario'
-)
+```)
 BEGIN
     CREATE TABLE [Inventarios].[Inventario]
     (
@@ -378,7 +378,7 @@ GO
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.TABLES 
     WHERE TABLE_SCHEMA = 'Inventarios' AND TABLE_NAME = 'InventarioMovimiento'
-)
+```)
 BEGIN
     CREATE TABLE Inventarios.InventarioMovimiento
     (
@@ -394,7 +394,7 @@ GO
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.TABLES 
     WHERE TABLE_SCHEMA = 'Inventarios' AND TABLE_NAME = 'InventarioMovimientoDetalle'
-)
+```)
 BEGIN
     CREATE TABLE Inventarios.InventarioMovimientoDetalle
     (
@@ -900,6 +900,7 @@ Registra una nueva compra en el sistema.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X POST https://localhost:7150/api/Compras/registrar-compra   -H "Authorization: Bearer TU_TOKEN_AQUI"   -H "Content-Type: application/json"   -d 
 '{
   "idCliente": 45,
@@ -910,9 +911,10 @@ curl -X POST https://localhost:7150/api/Compras/registrar-compra   -H "Authoriza
     }
   ]
 }'
-```
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -937,7 +939,7 @@ curl -X POST https://localhost:7150/api/Compras/registrar-compra   -H "Authoriza
   "meta": {
     "success": true,
     "message": "Compra registrada correctamete"
-  }
+```  }
 }
 ```
 
@@ -949,10 +951,12 @@ Obtiene todas las compras registradas.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X GET https://localhost:7150/api/Compras/obtener-compras   -H "Authorization: Bearer TU_TOKEN_AQUI"
-```
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -986,7 +990,7 @@ curl -X GET https://localhost:7150/api/Compras/obtener-compras   -H "Authorizati
   "meta": {
     "success": true,
     "message": "Compras obtenidas correctamente"
-  }
+```  }
 }
 ```
 
@@ -998,10 +1002,12 @@ Obtiene una compra específica por su ID.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X GET https://localhost:7150/api/Compras/obtener-compra-por-id/2   -H "Authorization: Bearer TU_TOKEN_AQUI"
-```
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -1026,7 +1032,7 @@ curl -X GET https://localhost:7150/api/Compras/obtener-compra-por-id/2   -H "Aut
   "meta": {
     "success": true,
     "message": "Compra 2 obtenida correctamente"
-  }
+```  }
 }
 ```
 
@@ -1038,12 +1044,12 @@ curl -X GET https://localhost:7150/api/Compras/obtener-compra-por-id/2   -H "Aut
       "status": "404",
       "title": "NotFound",
       "detail": "No existe una compra con Id = 99"
-    }
+```    }
   ],
   "meta": {
     "success": false,
     "message": "Compra no encontrada"
-  }
+```  }
 }
 ```
 
@@ -1055,12 +1061,12 @@ curl -X GET https://localhost:7150/api/Compras/obtener-compra-por-id/2   -H "Aut
       "status": "string",
       "title": "string",
       "detail": "string"
-    }
+```    }
   ],
   "meta": {
     "success": true,
     "message": "string"
-  }
+```  }
 }
 ```
 
@@ -1072,26 +1078,28 @@ Autentica un usuario con su login y contraseña, devolviendo un token JWT si es 
 
 #### 📤 Request
 ```bash
+```bash
 curl -X POST https://localhost:7149/api/Login 
 '{
   "usuarioLogin": "prueba",
   "password": "Fm/l0FLs22vndIL4lWJmQQ=="
-}'
-```
+```}'
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
     "type": "login",
     "attributes": {
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFeHByZXNpb24xIjoiblAzZzBZK1BOWmVheGIvM0pXZVFudz09IiwiRXhwcmVzaW9uMiI6IlM4K202WXBtTElkTTVGVVNFbFlNY3c9PSIsIm5iZiI6MTc1MTE3MTI1NiwiZXhwIjoxNzUxMTcyNDU2LCJpc3MiOiJTZWd1cmlkYWRMb2dpbiIsImF1ZCI6IlBydWViYVRlY25pY2EifQ.roi_OTxynwRWAV5PbtJDedQ6GYDGif6FtAUy1mn6maw"
-    }
+```    }
   },
   "meta": {
     "success": true,
     "message": "Inicio de sesión exitoso"
-  }
+```  }
 }
 ```
 
@@ -1104,9 +1112,11 @@ Obtiene un producto por su identificador único..
 
 #### 📤 Request
 ```bash
+```bash
 curl -X GET https://localhost:7148/api/Productos/obtener-producto-por-id/2  -H "Authorization: Bearer TU_TOKEN_AQUI"   -H "Content-Type: application/json"   -d 
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -1122,7 +1132,7 @@ curl -X GET https://localhost:7148/api/Productos/obtener-producto-por-id/2  -H "
   "meta": {
     "success": true,
     "message": "Petición ejecutada de forma correcta"
-  }
+```  }
 }
 ```
 
@@ -1134,10 +1144,12 @@ Obtiene la lista de todos los productos registrados.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X GET https://localhost:7148/api/Productos/obtener-productos   -H "Authorization: Bearer TU_TOKEN_AQUI"
-```
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -1176,7 +1188,7 @@ curl -X GET https://localhost:7148/api/Productos/obtener-productos   -H "Authori
   "meta": {
     "success": true,
     "message": "Petición ejecutada de forma correcta"
-  }
+```  }
 }
 ```
 
@@ -1188,15 +1200,17 @@ Crea un nuevo producto en el sistema.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X POST https://localhost:7148/api/Productos/crear-producto  -H "Authorization: Bearer TU_TOKEN_AQUI"
-'{
+```'{
   "nombreProducto": "Tio Nacho Manzanilla",
   "descripcion": "Shampoo",
   "precio": 73500
 }'
-```
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -1212,7 +1226,7 @@ curl -X POST https://localhost:7148/api/Productos/crear-producto  -H "Authorizat
   "meta": {
     "success": true,
     "message": "Petición ejecutada de forma correcta"
-  }
+```  }
 }
 ```
 
@@ -1224,12 +1238,12 @@ curl -X POST https://localhost:7148/api/Productos/crear-producto  -H "Authorizat
       "status": "404",
       "title": "NotFound",
       "detail": "Excepcion"
-    }
+```    }
   ],
   "meta": {
     "success": false,
     "message": "string"
-  }
+```  }
 }
 ```
 
@@ -1241,12 +1255,12 @@ curl -X POST https://localhost:7148/api/Productos/crear-producto  -H "Authorizat
       "status": "string",
       "title": "string",
       "detail": "string"
-    }
+```    }
   ],
   "meta": {
     "success": true,
     "message": "string"
-  }
+```  }
 }
 ```
 
@@ -1259,9 +1273,11 @@ Obtiene las existencias actuales de un producto en el inventario.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X GET https://localhost:7159/api/Inventario/obtener-existencias/2  -H "Authorization: Bearer TU_TOKEN_AQUI"   
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -1274,7 +1290,7 @@ curl -X GET https://localhost:7159/api/Inventario/obtener-existencias/2  -H "Aut
   "meta": {
     "success": true,
     "message": "Existencias del producto 2 obtenidas correctamente"
-  }
+```  }
 }
 ```
 
@@ -1286,17 +1302,19 @@ Actualiza las existencias de un producto en el inventario.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X POST https://localhost:7159/api/Inventario/actualizar-inventario  -H "Authorization: Bearer TU_TOKEN_AQUI"
-'{
+```'{
   "producto": {
     "idProducto": 2,
     "cantidad": 50
   },
   "tipoMovimiento": 1
 }'
-```
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -1309,7 +1327,7 @@ curl -X POST https://localhost:7159/api/Inventario/actualizar-inventario  -H "Au
   "meta": {
     "success": true,
     "message": "Existencias actualizadas correctamente"
-  }
+```  }
 }
 ```
 
@@ -1321,8 +1339,9 @@ Actualiza el inventario de productos al realizar una compra.
 
 #### 📤 Request
 ```bash
+```bash
 curl -X POST https://localhost:7159/api/Inventario/actualizar-inventario-compras -H "Authorization: Bearer TU_TOKEN_AQUI"
-'{
+```'{
   "tipoMovimiento": 2,
   "listaProductos": [
     {
@@ -1331,10 +1350,11 @@ curl -X POST https://localhost:7159/api/Inventario/actualizar-inventario-compras
     }
   ],
   "observaciones": "Compra efectuada hoy"
-}'
-```
+```}'
+``````
 
 #### ✅ Response JSON:API (`200 OK`)
+```json
 ```json
 {
   "data": {
@@ -1347,7 +1367,7 @@ curl -X POST https://localhost:7159/api/Inventario/actualizar-inventario-compras
   "meta": {
     "success": true,
     "message": "Existencias por compras actualizadas correctamente"
-  }
+```  }
 }
 ```
 
@@ -1361,12 +1381,12 @@ curl -X POST https://localhost:7159/api/Inventario/actualizar-inventario-compras
       "status": "404",
       "title": "NotFound",
       "detail": "Excepcion"
-    }
+```    }
   ],
   "meta": {
     "success": false,
     "message": "string"
-  }
+```  }
 }
 ```
 
@@ -1378,11 +1398,11 @@ curl -X POST https://localhost:7159/api/Inventario/actualizar-inventario-compras
       "status": "string",
       "title": "string",
       "detail": "string"
-    }
+```    }
   ],
   "meta": {
     "success": true,
     "message": "string"
-  }
+```  }
 }
 ```
