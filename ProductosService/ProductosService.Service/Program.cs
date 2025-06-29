@@ -30,7 +30,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
         .Enrich.FromLogContext()
         .WriteTo.Console()
         .WriteTo.File(
-            path: "C:\\TempLogs\\ServicioProductosLog-.json",
+            path: Path.Combine(Directory.GetCurrentDirectory(), "Logs", "log-.json"),
             rollingInterval: RollingInterval.Day,
             formatter: new Serilog.Formatting.Compact.RenderedCompactJsonFormatter());
 });
