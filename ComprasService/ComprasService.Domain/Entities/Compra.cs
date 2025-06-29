@@ -9,6 +9,8 @@ public partial class Compra
 
     public int IdCliente { get; set; }
 
+    public int IdMovimientoInventario { get; set; }
+
     public DateTime FechaCompra { get; set; }
 
     public int TotalItems { get; set; }

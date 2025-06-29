@@ -1,15 +1,15 @@
-﻿using ComprasService.Application.Helpers;
-using ComprasService.Application.Interfaces;
-using ComprasService.Application.Interfaces.Integrations;
-using ComprasService.Application.Services;
-using ComprasService.Common;
-using ComprasService.Domain.Interfaces.Repository;
-using ComprasService.Infraestructure.Context;
-using ComprasService.Infraestructure.Integrations.Services;
-using ComprasService.Infraestructure.Repository;
-using ComprasService.Service.HealthChecks;
-using ComprasService.Service.Helpers;
-using ComprasService.Service.Middleware;
+﻿using InventariosService.Application.Helpers;
+using InventariosService.Application.Interfaces;
+using InventariosService.Application.Interfaces.Integrations;
+using InventariosService.Application.Services;
+using InventariosService.Common;
+using InventariosService.Domain.Interfaces.Repository;
+using InventariosService.Infraestructure.Context;
+using InventariosService.Infraestructure.Integrations.Services;
+using InventariosService.Infraestructure.Repository;
+using InventariosService.Service.HealthChecks;
+using InventariosService.Service.Helpers;
+using InventariosService.Service.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -37,7 +37,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
 });
 
 
-builder.Services.AddDbContext<ContextCompras>(options =>
+builder.Services.AddDbContext<ContextInventarios>(options =>
     options.UseSqlServer(builder.Configuration.GetSecureConnectionString("DbPruebaTecnica")).EnableSensitiveDataLogging());
 
 builder.Services.AddHttpContextAccessor();
@@ -54,22 +54,15 @@ builder.Services.AddSingleton<IHealthCheckPublisher, LoggingHealthCheckPublisher
 
 builder.Services.AddScoped(typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<DbContext, ContextCompras>();
+builder.Services.AddScoped<DbContext, ContextInventarios>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<ICompraService, CompraService>();
+builder.Services.AddTransient<IInventarioService, InventarioService>();
 builder.Services.AddScoped<ICryptoHelper, CryptoHelper>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddHttpClient<IProductoApiService, ProductoApiService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["UrlApiProductos"]); 
-})
-.AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(300)))
-.AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
-
-builder.Services.AddHttpClient<IInventarioApiService, InventarioApiService>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["UrlApiIntentarios"]);
 })
 .AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(300)))
 .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
@@ -93,7 +86,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ComprasService.Service", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventariosService.Service", Version = "v1" });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
