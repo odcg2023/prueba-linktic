@@ -7,17 +7,7 @@ public partial class InventarioMovimiento
 {
     public int IdMovimiento { get; set; }
 
-    public int IdInventario { get; set; }
-
-    public int? IdCompra { get; set; }
-
-    public string TipoMovimiento { get; set; } = null!;
-
-    public int CantidadAntes { get; set; }
-
-    public int CantidadMovimiento { get; set; }
-
-    public int CantidadDespues { get; set; }
+    public byte TipoMovimiento { get; set; }
 
     public string? Observaciones { get; set; }
 
@@ -25,5 +15,5 @@ public partial class InventarioMovimiento
 
     public DateTime FechaCreacion { get; set; }
 
-    public virtual Inventario IdInventarioNavigation { get; set; } = null!;
+    public virtual ICollection<InventarioMovimientoDetalle> InventarioMovimientoDetalles { get; set; } = new List<InventarioMovimientoDetalle>();
 }

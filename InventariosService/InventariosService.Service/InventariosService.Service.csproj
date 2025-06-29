@@ -40,8 +40,4 @@
     <ProjectReference Include="..\InventariosService.Infraestructure\InventariosService.Infraestructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

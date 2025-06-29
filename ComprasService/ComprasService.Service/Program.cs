@@ -67,6 +67,13 @@ builder.Services.AddHttpClient<IProductoApiService, ProductoApiService>(client =
 .AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(300)))
 .AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
+builder.Services.AddHttpClient<IInventarioApiService, InventarioApiService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["UrlApiIntentarios"]);
+})
+.AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(300)))
+.AddTransientHttpErrorPolicy(p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

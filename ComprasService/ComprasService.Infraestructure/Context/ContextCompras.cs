@@ -19,12 +19,12 @@ public partial class ContextCompras : DbContext
     public virtual DbSet<Compra> Compras { get; set; }
 
     public virtual DbSet<CompraDetalle> CompraDetalles { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Compra>(entity =>
         {
-            entity.HasKey(e => e.IdCompra).HasName("PK__Compra__0A5CDB5C86F6883E");
+            entity.HasKey(e => e.IdCompra).HasName("PK__Compra__0A5CDB5CC39BC1E6");
 
             entity.ToTable("Compra", "Compras");
 
@@ -40,7 +40,7 @@ public partial class ContextCompras : DbContext
 
         modelBuilder.Entity<CompraDetalle>(entity =>
         {
-            entity.HasKey(e => e.IdCompraDetalle).HasName("PK__CompraDe__A1B840C57AC5871F");
+            entity.HasKey(e => e.IdCompraDetalle).HasName("PK__CompraDe__A1B840C5E63F2B07");
 
             entity.ToTable("CompraDetalle", "Compras");
 

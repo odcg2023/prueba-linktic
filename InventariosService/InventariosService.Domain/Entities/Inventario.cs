@@ -19,5 +19,5 @@ public partial class Inventario
 
     public DateTime? FechaModificacion { get; set; }
 
-    public virtual ICollection<InventarioMovimiento> InventarioMovimientos { get; set; } = new List<InventarioMovimiento>();
+    public virtual ICollection<InventarioMovimientoDetalle> InventarioMovimientoDetalles { get; set; } = new List<InventarioMovimientoDetalle>();
 }

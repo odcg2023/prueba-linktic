@@ -18,6 +18,7 @@ namespace ComprasService.UnitTests.ComprasService.Tests.Application.Services
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<ICurrentUserService> _currentUserServiceMock;
         private readonly Mock<IProductoApiService> _productoApiServiceMock;
+        private readonly Mock<IInventarioApiService> _inventarioApiServiceMock;
         private readonly CompraService _compraService;
 
         public CompraServiceTests()
@@ -26,6 +27,7 @@ namespace ComprasService.UnitTests.ComprasService.Tests.Application.Services
             _mapperMock = new Mock<IMapper>();
             _currentUserServiceMock = new Mock<ICurrentUserService>();
             _productoApiServiceMock = new Mock<IProductoApiService>();
+            _inventarioApiServiceMock = new Mock<IInventarioApiService>();
 
             _currentUserServiceMock.Setup(x => x.GetCurrentUserId()).Returns(1);
             _currentUserServiceMock.Setup(x => x.GetCurrentToken()).Returns("token");
@@ -34,7 +36,9 @@ namespace ComprasService.UnitTests.ComprasService.Tests.Application.Services
                 _unitOfWorkMock.Object,
                 _mapperMock.Object,
                 _currentUserServiceMock.Object,
-                _productoApiServiceMock.Object);
+                _productoApiServiceMock.Object,
+                _inventarioApiServiceMock.Object);
+            
         }
 
         [Fact]

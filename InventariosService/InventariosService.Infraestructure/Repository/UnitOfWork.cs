@@ -4,6 +4,7 @@ using InventariosService.Infraestructure.Context;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using InventariosService.Domain.Interfaces.Repositorio;
 
 namespace InventariosService.Infraestructure.Repository
 {
@@ -13,7 +14,7 @@ namespace InventariosService.Infraestructure.Repository
 
         public UnitOfWork(ContextInventarios context)
         {
-            this._context = context;
+            _context = context;
         }
 
         public IGenericRepository<T> Crud<T>() where T : class
@@ -21,32 +22,20 @@ namespace InventariosService.Infraestructure.Repository
             return new GenericRepository<T>(_context);
         }
 
-        public void Dispose()
+        public ITransaction BeginTransaction()
         {
-            if (_context != null)
-            {
-                _context.Dispose();
-            }
-        }
-
-        public void BeginTransaction()
-        {
-            _context.Database.BeginTransaction();
-        }
-
-        public void RollbackTransaction()
-        {
-            _context.Database.RollbackTransaction();
-        }
-
-        public void CommitTransaction()
-        {
-            _context.Database.CommitTransaction();
+            var transaction = _context.Database.BeginTransaction();
+            return new EfTransaction(transaction);
         }
 
         public int SaveChanges()
         {
             return _context.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
     }
 }

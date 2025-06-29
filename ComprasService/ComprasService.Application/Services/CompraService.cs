@@ -16,21 +16,24 @@ namespace ComprasService.Application.Services
     public class CompraService : ServiceBase, ICompraService
     {
         private readonly IProductoApiService _productoApiService;
+        private readonly IInventarioApiService _inventarioApiService;
 
         public CompraService(IUnitOfWork unitOfWork,
             IMapper mapper,
             ICurrentUserService currentUserService,
-            IProductoApiService productoApiService)
+            IProductoApiService productoApiService,
+            IInventarioApiService inventarioApiService)
             : base(unitOfWork, mapper, currentUserService)
         {
             _productoApiService = productoApiService;
+            _inventarioApiService = inventarioApiService;
         }
 
         public async Task<CompraDto> RegistrarCompra(RegistraCompraDto nuevaCompra)
         {
             var nuevaCompraDb = CrearCompraEntity(nuevaCompra);
             var productosDto = await ProcesarDetallesCompra(nuevaCompra, nuevaCompraDb);
-
+            ActualizarInventarioProductos(nuevaCompraDb);
             UnidadTrabajo.Crud<Compra>().Add(nuevaCompraDb);
             UnidadTrabajo.SaveChanges();
 
@@ -40,9 +43,27 @@ namespace ComprasService.Application.Services
             return compraDto;
         }
 
+        private void ActualizarInventarioProductos(Compra nuevaCompraDb)
+        {
+            var inventarioActualizado = _inventarioApiService.ActualizarInventario(
+                new ProductosCompraDto
+                {
+                    TipoMovimiento = 2,
+                    Observaciones = $"Compra efectuada el {DateTime.Now}",
+                    ListaProductos = nuevaCompraDb.CompraDetalles.Select(x => new InventarioProductoDto
+                    {
+                        Cantidad = x.CantidadProducto,
+                        IdProducto = x.IdProducto
+                    }).ToList()
+                }, CurrentUserService.GetCurrentToken()).GetAwaiter().GetResult()
+                ?? throw new ApplicationException("No se pudo actualizar el inventario");
+
+            nuevaCompraDb.IdMovimientoInventario = inventarioActualizado.IdMovimiento;
+        }
+
         public async Task<List<CompraDto>> ObtenerCompras()
         {
-            var comprasDb =  UnidadTrabajo.Crud<Compra>().GetAllWithIncludes(x=> x.CompraDetalles);
+            var comprasDb = UnidadTrabajo.Crud<Compra>().GetAllWithIncludes(x => x.CompraDetalles);
             var comprasDto = new List<CompraDto>();
 
             foreach (var compra in comprasDb)
@@ -57,7 +78,7 @@ namespace ComprasService.Application.Services
 
         public async Task<CompraDto> ObtenerCompraPorId(int idCompra)
         {
-            var compraDb =  UnidadTrabajo.Crud<Compra>().FindWithIncludes(x => x.IdCompra == idCompra, x=> x.CompraDetalles).FirstOrDefault()
+            var compraDb = UnidadTrabajo.Crud<Compra>().FindWithIncludes(x => x.IdCompra == idCompra, x => x.CompraDetalles).FirstOrDefault()
                             ?? throw new ApplicationException($"No existe la compra con Id: {idCompra}");
 
             var compraDto = Mapper.Map<CompraDto>(compraDb);
@@ -85,6 +106,7 @@ namespace ComprasService.Application.Services
             foreach (var item in compraDto.Productos)
             {
                 var producto = await ValidarProducto(item.IdProducto);
+                ValidarInventarioProducto(item);
 
                 var detalle = new CompraDetalle
                 {
@@ -107,6 +129,18 @@ namespace ComprasService.Application.Services
             }
 
             return productos;
+        }
+
+        private void ValidarInventarioProducto(RegistrarCompraDetalleDto item)
+        {
+            var inventario = _inventarioApiService
+                .ObtenerInventarioProducto(item.IdProducto, CurrentUserService.GetCurrentToken())
+                .GetAwaiter().GetResult()
+                ?? throw new ApplicationException($"No existe el inventario del producto con Id: {item.IdProducto}");
+
+            if (inventario.Cantidad < item.CantidadProducto)
+                throw new ApplicationException($"El producto con Id: {item.IdProducto} no tiene stock suficiente");
+
         }
 
         private async Task<List<CompraDetalleDto>> EnriquecerDetallesCompra(

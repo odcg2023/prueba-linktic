@@ -8,8 +8,7 @@ namespace InventariosService.Transversal.Mapping
     {
         public Mapper()
         {
-          
-           
+          CreateMap<Inventario, InventarioProductoDto>().ReverseMap();
         }
     }
 }

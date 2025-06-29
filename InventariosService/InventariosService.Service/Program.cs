@@ -56,7 +56,7 @@ builder.Services.AddScoped(typeof(UnitOfWork));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<DbContext, ContextInventarios>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddTransient<IInventarioService, InventarioService>();
 builder.Services.AddScoped<ICryptoHelper, CryptoHelper>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
